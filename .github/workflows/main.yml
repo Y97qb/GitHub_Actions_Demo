@@ -22,13 +22,8 @@ jobs:
 
       - name: Move file to SharePoint in Microsoft Teams
         env:
-          SHAREPOINT_URL: ${{ secrets.SHAREPOINT_URL }}
-          SHAREPOINT_FOLDER: ${{ secrets.SHAREPOINT_FOLDER }}
+          SHAREPOINT_URL: https://cmcglobalcompany.sharepoint.com/:f:/r/sites/Test_GitHubActions/Shared%20Documents/Test_Upload_File
+          SHAREPOINT_FOLDER: Evd
         run: |
           # Di chuyển tệp đến SharePoint
           curl -X PUT -T example.xlsx "$SHAREPOINT_URL/$SHAREPOINT_FOLDER/example.xlsx"
-
-      - name: Log SHAREPOINT_URL--------------------
-        run: |
-          # Xem URL
-          echo "SHAREPOINT_URL_FULL: $SHAREPOINT_URL/$SHAREPOINT_FOLDER/example.xlsx"
