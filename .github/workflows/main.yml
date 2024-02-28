@@ -13,22 +13,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # Thêm các bước khác để chạy datapatch và tạo file ở đây
-
       - name: Create Excel file
         run: |
           # Thực hiện tạo tệp Excel ở đây
           touch example.xlsx
 
-      - name: Move file to SharePoint in Microsoft Teams1
-        env:
-          SHAREPOINT_URL: ${{ secrets.SHAREPOINT_URL }}
-          SHAREPOINT_FOLDER: ${{ secrets.SHAREPOINT_FOLDER }}
-        run: |
-          # Di chuyển tệp đến SharePoint
-          curl -X PUT -T example.xlsx "https://cmcglobalcompany.sharepoint.com/:f:/r/sites/Test_GitHubActions/Shared%20Documents/Test_Upload_File/Evd/example.xlsx"
-
-      - name: Log SHAREPOINT_URL--------------------
-        run: |
-          # Xem URL
-          echo "SHAREPOINT_URL_FULL: $SHAREPOINT_URL/$SHAREPOINT_FOLDER/example.xlsx"
+      - name: Move file to SharePoint in Microsoft Teams
+        uses: KoenZomers/SharePoint-UploadFile@master
+        with:
+          siteUrl: 'https://cmcglobalcompany.sharepoint.com/sites/Test_GitHubActions'
+          documentLibrary: 'Shared%20Documents/Test_Upload_File/Evd'
+          sourceFolder: './'
+          fileToUpload: 'example.xlsx'
