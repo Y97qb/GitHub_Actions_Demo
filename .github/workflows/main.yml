@@ -26,7 +26,7 @@ jobs:
           SHAREPOINT_FOLDER: ${{ secrets.SHAREPOINT_FOLDER }}
         run: |
           # Di chuyển tệp đến SharePoint
-          curl -X PUT -T example.xlsx "$SHAREPOINT_URL/$SHAREPOINT_FOLDER/example.xlsx"
+          curl -X PUT -T example.xlsx "https://cmcglobalcompany.sharepoint.com/:f:/r/sites/Test_GitHubActions/Shared%20Documents/Test_Upload_File/Evd/example.xlsx"
 
       - name: Log SHAREPOINT_URL--------------------
         run: |
