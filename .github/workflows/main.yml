@@ -20,7 +20,7 @@ jobs:
           # Thực hiện tạo tệp Excel ở đây
           touch example.xlsx
 
-      - name: Move file to SharePoint in Microsoft Teams
+      - name: Move file to SharePoint in Microsoft Teams1
         env:
           SHAREPOINT_URL: ${{ secrets.SHAREPOINT_URL }}
           SHAREPOINT_FOLDER: ${{ secrets.SHAREPOINT_FOLDER }}
