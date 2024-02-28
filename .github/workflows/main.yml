@@ -19,7 +19,7 @@ jobs:
           touch example1.xlsx
 
       - name: Move file to SharePoint in Microsoft Teams2
-        uses: KoenZomers/SharePoint-UploadFile@master
+        uses: Y97qb/SharePoint-UploadFile@main
         with:
           siteUrl: 'https://cmcglobalcompany.sharepoint.com/sites/Test_GitHubActions'
           documentLibrary: 'Shared%20Documents/Test_Upload_File/Evd'
