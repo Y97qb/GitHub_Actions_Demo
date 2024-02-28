@@ -1,0 +1,28 @@
+name: Pull Request Workflow
+
+on:
+  pull_request:
+    types:
+      - opened
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Thêm các bước khác để chạy datapatch và tạo file ở đây
+
+      - name: Create Excel file
+        run: |
+          # Thực hiện tạo tệp Excel ở đây
+          touch example.xlsx
+
+      - name: Move file to SharePoint in Microsoft Teams
+        env:
+          SHAREPOINT_URL: ${{ secrets.SHAREPOINT_URL }}
+        run: |
+          # Di chuyển tệp đến SharePoint
+          curl -X PUT -T example.xlsx "$SHAREPOINT_URL/example.xlsx"
