@@ -17,7 +17,6 @@ jobs:
         run: |
           # Thực hiện tạo tệp Excel ở đây
           touch example.xlsx
-
       - name: Move file to SharePoint in Microsoft Teams
         uses: KoenZomers/SharePoint-UploadFile@master
         with:
