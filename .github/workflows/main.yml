@@ -17,7 +17,8 @@ jobs:
         run: |
           # Thực hiện tạo tệp Excel ở đây
           touch example.xlsx
-      - name: Move file to SharePoint in Microsoft Teams
+
+      - name: Move file to SharePoint in Microsoft Teams2
         uses: KoenZomers/SharePoint-UploadFile@master
         with:
           siteUrl: 'https://cmcglobalcompany.sharepoint.com/sites/Test_GitHubActions'
