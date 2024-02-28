@@ -27,3 +27,6 @@ jobs:
         run: |
           # Di chuyển tệp đến SharePoint
           curl -X PUT -T example.xlsx "$SHAREPOINT_URL/$SHAREPOINT_FOLDER/example.xlsx"
+
+      - name: Log SHAREPOINT_URL--------------------
+        run: echo "SHAREPOINT_URL: $SHAREPOINT_URL"
