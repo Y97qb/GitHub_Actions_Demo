@@ -20,7 +20,7 @@ jobs:
           # Thực hiện tạo tệp Excel ở đây
           touch example.xlsx
 
-      - name: Move file to SharePoint in Microsoft Teams
+      - name: Move file to SharePoint in Microsoft Teams1
         env:
           SHAREPOINT_URL: https://cmcglobalcompany.sharepoint.com/:f:/r/sites/Test_GitHubActions/Shared%20Documents/Test_Upload_File
           SHAREPOINT_FOLDER: Evd
