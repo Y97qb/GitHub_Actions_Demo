@@ -13,16 +13,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Create Test File
-        run: touch ${{ github.workspace }}/foo.txt
-
       - name: Upload File to SharePoint
         env:
           TENANT_ID: ${{ secrets.SHAREPOINT_TENANT_ID }}
           CLIENT_ID: ${{ secrets.SHAREPOINT_CLIENT_ID }}
           CLIENT_SECRET: ${{ secrets.SHAREPOINT_CLIENT_SECRET }}
         run: |
-          $filePath = "${{ github.workspace }}/foo.txt"
+          $filePath = "C:\Users\nxy\ProjectSource\GitHub_Actions_Demo\hellotest.txt"
           $hostName = "cmcglobalcompany.sharepoint.com"
           $siteName = "Test_GitHubActions"
           $uploadPath = "Test_Upload_File/Evd"
