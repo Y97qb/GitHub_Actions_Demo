@@ -1,27 +1,18 @@
-name: Pull Request Workflow
-
-on:
-  pull_request:
-    types:
-      - opened
-
+name: example-file-upload
+on: workflow_dispatch
 jobs:
-  build:
+  get_report:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Create Excel file
-        run: |
-          # Thực hiện tạo tệp Excel ở đây
-          touch example1.xlsx
-
-      - name: Move file to SharePoint in Microsoft Teams2
-        uses: Y97qb/SharePoint-UploadFile@main
+      - name: Create Test File
+        run: touch /tmp/foo.txt
+      - name: Send to Sharepoint
+        uses: Y97qb/sharepoint-file-upload-action@1.0.0
         with:
-          siteUrl: 'https://cmcglobalcompany.sharepoint.com/sites/Test_GitHubActions'
-          documentLibrary: 'Shared%20Documents/Test_Upload_File/Evd'
-          sourceFolder: './'
-          fileToUpload: 'example1.xlsx'
+          file_path: "*.txt"
+          host_name: 'cmcglobalcompany.sharepoint.com'
+          site_name: 'Test_GitHubActions'
+          upload_path: 'Test_Upload_File/Evd'
+          tenant_id: ${{ secrets.SHAREPOINT_TENANT_ID }}
+          client_id: ${{ secrets.SHAREPOINT_CLIENT_ID }}
+          client_secret: ${{ secrets.SHAREPOINT_CLIENT_SECRET }}
