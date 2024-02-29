@@ -1,21 +1,40 @@
 name: example-file-upload
+
 on:
   pull_request:
     types:
       - opened
+
 jobs:
-  get_report:
+  upload_file:
     runs-on: ubuntu-latest
+
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
       - name: Create Test File
         run: touch /tmp/foo.txt
-      - name: Send to Sharepoint
-        uses: Y97qb/sharepoint-file-upload-action@1.0.0
-        with:
-          file_path: "*.txt"
-          host_name: 'cmcglobalcompany.sharepoint.com'
-          site_name: 'Test_GitHubActions'
-          upload_path: 'Test_Upload_File/Evd'
-          tenant_id: ${{ secrets.SHAREPOINT_TENANT_ID }}
-          client_id: ${{ secrets.SHAREPOINT_CLIENT_ID }}
-          client_secret: ${{ secrets.SHAREPOINT_CLIENT_SECRET }}
+
+      - name: Install PowerShell
+        uses: appleboy/setup-pwsh@v1
+
+      - name: Upload File to SharePoint
+        env:
+          TENANT_ID: ${{ secrets.SHAREPOINT_TENANT_ID }}
+          CLIENT_ID: ${{ secrets.SHAREPOINT_CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.SHAREPOINT_CLIENT_SECRET }}
+        run: |
+          $filePath = "/tmp/foo.txt"
+          $hostName = "cmcglobalcompany.sharepoint.com"
+          $siteName = "Test_GitHubActions"
+          $uploadPath = "Test_Upload_File/Evd"
+          
+          # Authenticate with SharePoint
+          Connect-PnPOnline -Url "https://$hostName/sites/$siteName" -ClientId $env:CLIENT_ID -ClientSecret $env:CLIENT_SECRET -Tenant $env:TENANT_ID
+
+          # Upload the file
+          Add-PnPFile -Path $filePath -Folder $uploadPath -NewFileName (Split-Path -Path $filePath -Leaf)
+
+          # Disconnect from SharePoint
+          Disconnect-PnPOnline
