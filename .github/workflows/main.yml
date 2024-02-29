@@ -11,10 +11,12 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
-      - name: Create Test File
-        run: touch /tmp/foo.txt
+      - name: Generate Test File
+        id: generate-file
+        run: |
+          echo "Hello, World!" > ${{ github.workspace }}/hellotest.txt
 
       - name: Upload File to SharePoint
         env:
@@ -22,10 +24,10 @@ jobs:
           CLIENT_ID: ${{ secrets.SHAREPOINT_CLIENT_ID }}
           CLIENT_SECRET: ${{ secrets.SHAREPOINT_CLIENT_SECRET }}
         run: |
-          $filePath = "/tmp/foo.txt"
-          $hostName = "cmcglobalcompany.sharepoint.com"
-          $siteName = "Test_GitHubActions"
-          $uploadPath = "Test_Upload_File/Evd"
+            $filePath = "${{ github.workspace }}/hellotest.txt"
+            $hostName = "cmcglobalcompany.sharepoint.com"
+            $siteName = "Test_GitHubActions"
+            $uploadPath = "Test_Upload_File/Evd"
           
           # Install SharePoint Online Management Shell
           Invoke-WebRequest -Uri https://download.microsoft.com/download/0/1/D/01D06854-CA0C-46F1-ADBA-EBF86010DCC6/sharepointclientcomponents_16.1.2102.1200_x64_en-us.msi -OutFile sharepointclientcomponents.msi
