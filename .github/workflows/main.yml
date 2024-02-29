@@ -19,7 +19,7 @@ jobs:
           CLIENT_ID: ${{ secrets.SHAREPOINT_CLIENT_ID }}
           CLIENT_SECRET: ${{ secrets.SHAREPOINT_CLIENT_SECRET }}
         run: |
-          $filePath = "C:\Users\nxy\ProjectSource\GitHub_Actions_Demo\hellotest.txt"
+            pwsh -Command "$filePath = 'C:\Users\nxy\ProjectSource\GitHub_Actions_Demo\hellotest.txt'"
           $hostName = "cmcglobalcompany.sharepoint.com"
           $siteName = "Test_GitHubActions"
           $uploadPath = "Test_Upload_File/Evd"
