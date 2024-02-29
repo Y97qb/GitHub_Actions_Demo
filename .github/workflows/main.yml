@@ -16,9 +16,6 @@ jobs:
       - name: Create Test File
         run: touch /tmp/foo.txt
 
-      - name: Install PowerShell
-        uses: appleboy/setup-pwsh@v1
-
       - name: Upload File to SharePoint
         env:
           TENANT_ID: ${{ secrets.SHAREPOINT_TENANT_ID }}
@@ -30,8 +27,14 @@ jobs:
           $siteName = "Test_GitHubActions"
           $uploadPath = "Test_Upload_File/Evd"
           
+          # Install SharePoint Online Management Shell
+          Invoke-WebRequest -Uri https://download.microsoft.com/download/0/1/D/01D06854-CA0C-46F1-ADBA-EBF86010DCC6/sharepointclientcomponents_16.1.2102.1200_x64_en-us.msi -OutFile sharepointclientcomponents.msi
+          Start-Process msiexec.exe -ArgumentList '/i', 'sharepointclientcomponents.msi', '/qn' -NoNewWindow -Wait
+
           # Authenticate with SharePoint
-          Connect-PnPOnline -Url "https://$hostName/sites/$siteName" -ClientId $env:CLIENT_ID -ClientSecret $env:CLIENT_SECRET -Tenant $env:TENANT_ID
+          $secpasswd = ConvertTo-SecureString $env:CLIENT_SECRET -AsPlainText -Force
+          $creds = New-Object System.Management.Automation.PSCredential ($env:CLIENT_ID, $secpasswd)
+          Connect-PnPOnline -Url "https://$hostName/sites/$siteName" -Credentials $creds
 
           # Upload the file
           Add-PnPFile -Path $filePath -Folder $uploadPath -NewFileName (Split-Path -Path $filePath -Leaf)
