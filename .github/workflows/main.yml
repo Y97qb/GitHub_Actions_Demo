@@ -14,6 +14,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Upload File to SharePoint
+        shell: pwsh
         env:
           TENANT_ID: ${{ secrets.SHAREPOINT_TENANT_ID }}
           CLIENT_ID: ${{ secrets.SHAREPOINT_CLIENT_ID }}
@@ -23,7 +24,7 @@ jobs:
           $hostName = "cmcglobalcompany.sharepoint.com"
           $siteName = "Test_GitHubActions"
           $uploadPath = "Test_Upload_File/Evd"
-          
+
           # Install SharePoint Online Management Shell
           Invoke-WebRequest -Uri https://download.microsoft.com/download/0/1/D/01D06854-CA0C-46F1-ADBA-EBF86010DCC6/sharepointclientcomponents_16.1.2102.1200_x64_en-us.msi -OutFile sharepointclientcomponents.msi
           Start-Process msiexec.exe -ArgumentList '/i', 'sharepointclientcomponents.msi', '/qn' -NoNewWindow -Wait
