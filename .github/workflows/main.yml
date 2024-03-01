@@ -20,5 +20,4 @@ jobs:
           CLIENT_ID: ${{ secrets.SHAREPOINT_CLIENT_ID }}
           CLIENT_SECRET: ${{ secrets.SHAREPOINT_CLIENT_SECRET }}
         run: |
-          which powershell
-          powershell -File ./.github/scripts/execute-data-patch.ps1
+          pwsh -File ./.github/scripts/execute-data-patch.ps1

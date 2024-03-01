@@ -1,30 +1,39 @@
-chcp 65001
+# Thiết lập các thông tin cần thiết
+$siteUrl = "https://cmcglobalcompany.sharepoint.com"
+$libraryName = "Documents"
+$folderPath = "/Test_Upload_File/Evd"
+$localFolderPath = "C:\Users\nxy\Documents\Documents_NXY\Folder-test"
 
-# ===========================================================
-#                          MAIN SCRIPT
-# ===========================================================
+# Đường dẫn tới thư viện CSOM (Client Side Object Model) của SharePoint
+Add-Type -Path "C:\Path\To\Microsoft.SharePoint.Client.dll"
+Add-Type -Path "C:\Path\To\Microsoft.SharePoint.Client.Runtime.dll"
 
-Start-Transcript -Path $logFile;
-WriteLog 'debug' 'Execution - Start';
-try {
-    WriteLog 'debug' 'Initializing...';
-    if ($filesUpload.keys.count -gt 0) {
-        #-- Step 4: Upload files for each environment
-        $filesUpload.keys | ForEach-Object {
-            $sourceFolderPath = $_;
-            $environmentFolder = $filesUpload[$sourceFolderPath];
-            $config = ReadConfigFile -Path $configSharepointPath;
-            $targetFolder = $config.SERVER_RELATIVE_PATH;
-            $userName = $config.USERNAME;
-            $appPassword = $config.APP_PASSWORD;
-            $webUrl = $config.WEB_URL;
-            $appPasswordSecure = ConvertTo-SecureString $appPassword -AsPlainText -Force;
-            UploadPnPFolder -SourceFolderPath $sourceFolderPath -TargetFolder $targetFolder -UserName $userName -AppPassword $appPasswordSecure -WebUrl $webUrl -EnvironmentFolder $environmentFolder;
-        }
-        #-- End Step4
-    }
-} catch {
-    WriteLog 'error' ("Detail: " + $Error);
+# Tạo đối tượng ClientContext
+$credentials = Get-Credential
+$context = New-Object Microsoft.SharePoint.Client.ClientContext($siteUrl)
+$context.Credentials = $credentials
+
+# Lấy thư mục đích trong SharePoint
+$web = $context.Web
+$folder = $web.GetFolderByServerRelativeUrl($folderPath)
+$context.Load($folder)
+$context.ExecuteQuery()
+
+# Lấy danh sách tệp tin trong thư mục cục bộ
+$fileNames = Get-ChildItem -Path $localFolderPath -Filter "*.txt" -File | Select-Object -ExpandProperty Name
+
+# Đẩy các tệp tin lên SharePoint
+foreach ($fileName in $fileNames) {
+    $fileContent = [System.IO.File]::ReadAllBytes("$localFolderPath\$fileName")
+    $fileCreationInfo = New-Object Microsoft.SharePoint.Client.FileCreationInformation
+    $fileCreationInfo.Content = $fileContent
+    $fileCreationInfo.Overwrite = $true
+    $fileCreationInfo.Url = "$folderPath/$fileName"
+    $uploadFile = $folder.Files.Add($fileCreationInfo)
+    $context.Load($uploadFile)
+    $context.ExecuteQuery()
+
+    Write-Host "File '$fileName' uploaded successfully."
 }
-WriteLog 'debug' 'Execution - End';
-Stop-Transcript;
+
+$context.Dispose()
