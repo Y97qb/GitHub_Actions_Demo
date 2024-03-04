@@ -1,5 +1,7 @@
+$modulePath = "C:\Users\nxy\Documents\Documents_NXY\Folder-test\SharePointPnPPowerShellOnline\3.29.2101.0"
+
 # Import module SharePointPnPPowerShellOnline
-Import-Module -Name SharePointPnPPowerShellOnline
+Import-Module -Name $modulePath
 
 # Thông tin xác thực SharePoint
 $siteUrl = "https://cmcglobalcompany.sharepoint.com/sites/Test_GitHubActions"
@@ -13,7 +15,9 @@ $filePath = "C:\Users\nxy\Documents\Documents_NXY\Folder-test\aaaa.txt"
 $destinationFolderUrl = "/Shared Documents/Test_Upload_File/Evd"
 
 # Tạo kết nối đến SharePoint
-Connect-PnPOnline -Url $siteUrl -Credentials (Get-Credential -UserName $username -Password $password)
+$securePassword = ConvertTo-SecureString -String $password -AsPlainText -Force
+$credentials = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $username, $securePassword
+Connect-PnPOnline -Url $siteUrl -Credentials $credentials
 
 # Tải lên tệp tin
 Add-PnPFile -Path $filePath -Folder $destinationFolderUrl -ErrorAction Stop
