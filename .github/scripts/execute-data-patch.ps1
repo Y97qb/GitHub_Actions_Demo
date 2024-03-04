@@ -1,39 +1,38 @@
-# Thiết lập các thông tin cần thiết
-$siteUrl = "https://cmcglobalcompany.sharepoint.com"
-$libraryName = "Documents"
-$folderPath = "/Test_Upload_File/Evd"
-$localFolderPath = "C:\Users\nxy\Documents\Documents_NXY\Folder-test"
+# Import module
+Import-Module -Name Microsoft.Graph.GraphRequests.Authentication
 
-# Đường dẫn tới thư viện CSOM (Client Side Object Model) của SharePoint
-Add-Type -Path "C:\Path\To\Microsoft.SharePoint.Client.dll"
-Add-Type -Path "C:\Path\To\Microsoft.SharePoint.Client.Runtime.dll"
+# Khởi tạo các thông tin xác thực
+$clientId = "1e291fa4-039d-41eb-9595-0f38c9ad3f56"
+$clientSecret = "pn08Q~9jUjddG2bpnPp4sOsIno9B1ZYoV~a.Mbdc"
+$tenantId = "f89c1178-4c5d-43b5-9f3b-d21c3bec61b5"
 
-# Tạo đối tượng ClientContext
-$credentials = Get-Credential
-$context = New-Object Microsoft.SharePoint.Client.ClientContext($siteUrl)
-$context.Credentials = $credentials
+# Khởi tạo token
+$token = Get-MgAccessToken -ClientId $clientId -ClientSecret $clientSecret -TenantId $tenantId
 
-# Lấy thư mục đích trong SharePoint
-$web = $context.Web
-$folder = $web.GetFolderByServerRelativeUrl($folderPath)
-$context.Load($folder)
-$context.ExecuteQuery()
+# Thay thế các giá trị sau đây bằng thông tin của bạn
+$siteUrl = "https://cmcglobalcompany.sharepoint.com/:f:/r/sites/Test_GitHubActions"
+$filePath = "C:\Users\nxy\Documents\Documents_NXY\Folder-test\aaaa.txt"
 
-# Lấy danh sách tệp tin trong thư mục cục bộ
-$fileNames = Get-ChildItem -Path $localFolderPath -Filter "*.txt" -File | Select-Object -ExpandProperty Name
+# Trích xuất siteId
+$siteId = ($siteUrl -split "/sites/")[1]
 
-# Đẩy các tệp tin lên SharePoint
-foreach ($fileName in $fileNames) {
-    $fileContent = [System.IO.File]::ReadAllBytes("$localFolderPath\$fileName")
-    $fileCreationInfo = New-Object Microsoft.SharePoint.Client.FileCreationInformation
-    $fileCreationInfo.Content = $fileContent
-    $fileCreationInfo.Overwrite = $true
-    $fileCreationInfo.Url = "$folderPath/$fileName"
-    $uploadFile = $folder.Files.Add($fileCreationInfo)
-    $context.Load($uploadFile)
-    $context.ExecuteQuery()
+# Trích xuất driveId và folderPath
+$pathParts = ($siteUrl -split "/:f:/")[1] -split "/"
+$driveId = $pathParts[0]
+$folderPath = $pathParts[1..($pathParts.Length - 2)] -join "/"
 
-    Write-Host "File '$fileName' uploaded successfully."
+# Đọc nội dung file
+$fileContent = Get-Content -Path $filePath -Raw
+
+# Tạo URL upload file
+$uploadUrl = "https://graph.microsoft.com/v1.0/sites/$siteId/drives/$driveId/root:/$folderPath/FileName.ext:/content"
+
+# Upload file
+$response = Invoke-RestMethod -Uri $uploadUrl -Headers @{Authorization = "Bearer $($token.access_token)"} -Method Put -ContentType "text/plain" -Body $fileContent
+
+# Kiểm tra kết quả
+if ($response.id) {
+    Write-Output "File uploaded successfully."
+} else {
+    Write-Output "File upload failed."
 }
-
-$context.Dispose()
