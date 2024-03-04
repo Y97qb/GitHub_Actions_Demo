@@ -1,7 +1,14 @@
 $siteUrl = "https://cmcglobalcompany.sharepoint.com/sites/Test_GitHubActions"
 $username = "Sbtmaff2024"
 $password = "cxpzlmmkysyqbffr"
-$filePath = "C:\Users\nxy\Documents\Documents_NXY\Folder-test\aaaa.txt"
+$filePath = "/home/runner/work/GitHub_Actions_Demo/GitHub_Actions_Demo/Folder-test/aaaa.txt"
+$content = "This is the content of the file."
+
+# Tạo tệp tin mới
+New-Item -Path $filePath -ItemType File -Force
+
+# Ghi nội dung vào tệp tin
+Set-Content -Path $filePath -Value $content
 $destinationFolderUrl = "/sites/Test_GitHubActions/Shared Documents/Test_Upload_File/Evd"
 
 # Tạo kết nối đến SharePoint
