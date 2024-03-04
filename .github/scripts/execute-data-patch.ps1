@@ -22,7 +22,7 @@ $driveId = $pathParts[0]
 $folderPath = $pathParts[1..($pathParts.Length - 2)] -join "/"
 
 # Đọc nội dung file
-$fileContent = Get-Content -Path $filePath -Raw
+$fileContent = Get-Content -Path $filePath -RawContent 
 
 # Tạo URL upload file
 $uploadUrl = "https://graph.microsoft.com/v1.0/sites/$siteId/drives/$driveId/root:/$folderPath/FileName.ext:/content"
