@@ -13,7 +13,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Call File execute-data-patch.ps1
+      - name: Upload File to SharePoint
         shell: pwsh
         run: |
-          pwsh -File ./.github/scripts/execute-data-patch.ps1
+          pwsh -File ./execute-data-patch.ps1
