@@ -1,4 +1,4 @@
-$modulePath = "C:\Users\nxy\Documents\Documents_NXY\Folder-test\SharePointPnPPowerShellOnline\3.29.2101.0"
+$modulePath = "C:\Users\nxy\Documents\Documents_NXY\Folder-test\SharePointPnPPowerShellOnline"
 
 # Import module SharePointPnPPowerShellOnline
 Import-Module -Name $modulePath
