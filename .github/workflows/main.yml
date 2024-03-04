@@ -20,5 +20,4 @@ jobs:
           CLIENT_ID: ${{ secrets.SHAREPOINT_CLIENT_ID }}
           CLIENT_SECRET: ${{ secrets.SHAREPOINT_CLIENT_SECRET }}
         run: |
-          Install-Module -Name Microsoft.Graph.GraphRequests.Authentication -Repository PSGallery
           pwsh -File ./.github/scripts/execute-data-patch.ps1
