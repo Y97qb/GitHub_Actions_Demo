@@ -1,0 +1,4 @@
+WEB_URL=https://cmcglobalcompany.sharepoint.com/sites/Test_GitHubActions
+SERVER_RELATIVE_PATH=Share Documents/Test_Upload_File
+USERNAME=Sbtmaff2024
+APP_PASSWORD=cxpzlmmkysyqbffr

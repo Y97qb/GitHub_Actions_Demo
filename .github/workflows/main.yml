@@ -13,15 +13,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Create file
-        run: |
-          echo "This is a sample file." > $GITHUB_WORKSPACE/aaaa.txt
-
-      - name: Upload File to SharePoint
+      - name: Call File execute-data-patch.ps1
         shell: pwsh
-        env:
-          TENANT_ID: ${{ secrets.SHAREPOINT_TENANT_ID }}
-          CLIENT_ID: ${{ secrets.SHAREPOINT_CLIENT_ID }}
-          CLIENT_SECRET: ${{ secrets.SHAREPOINT_CLIENT_SECRET }}
         run: |
           pwsh -File ./.github/scripts/execute-data-patch.ps1
