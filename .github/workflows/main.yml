@@ -13,11 +13,30 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Upload File to SharePoint
-        shell: pwsh
-        env:
-          TENANT_ID: ${{ secrets.SHAREPOINT_TENANT_ID }}
-          CLIENT_ID: ${{ secrets.SHAREPOINT_CLIENT_ID }}
-          CLIENT_SECRET: ${{ secrets.SHAREPOINT_CLIENT_SECRET }}
+      - name: Set up PowerShell
+        uses: microsoft/powershell@v1
+
+      - name: Install SharePointPnPPowerShellOnline module
         run: |
-          pwsh -File ./.github/scripts/execute-data-patch.ps1
+          Install-Module -Name SharePointPnPPowerShellOnline -Force -AllowClobber
+
+      - name: Upload file to GitHub Actions
+        run: |
+          cp C:/Users/nxy/Documents/Documents_NXY/Folder-test/aaaa.txt $GITHUB_WORKSPACE/aaaa.txt
+
+      - name: Upload file to SharePoint
+        run: |
+          $clientID = ${{ secrets.CLIENT_ID }}
+          $clientSecret = ${{ secrets.CLIENT_SECRET }}
+          $tenantID = ${{ secrets.TENANT_ID }}
+          $siteID = "Test_GitHubActions"
+          $filePath = "Shared Documents/Test_Upload_File/Evd"
+
+          $secpasswd = ConvertTo-SecureString $clientSecret -AsPlainText -Force
+          $cred = New-Object System.Management.Automation.PSCredential ($clientID, $secpasswd)
+
+          Connect-PnPOnline -ClientId $clientID -ClientSecret $clientSecret -Tenant $tenantID
+          Add-PnPTenantAppCatalogSite -Site $siteID
+          Add-PnPFile -Path $filePath -Folder "Shared Documents" -Connection $cred
+        # run: |
+        #   pwsh -File ./.github/scripts/execute-data-patch.ps1
