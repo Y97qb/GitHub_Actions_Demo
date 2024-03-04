@@ -1,9 +1,9 @@
 name: example-file-upload
 
 on:
-  pull_request:
-    types:
-      - opened
+  push:
+    branches:
+      - feature/nxy-45
 
 jobs:
   upload_file:
@@ -12,9 +12,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
-      - name: Set up PowerShell
-        uses: microsoft/powershell@v1
 
       - name: Install SharePointPnPPowerShellOnline module
         run: |
