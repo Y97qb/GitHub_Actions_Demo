@@ -1,9 +1,9 @@
 name: example-file-upload
 
 on:
-  pull_request:
-    types:
-      - opened
+  push:
+    branches:
+      - feature/nxy-45
 
 jobs:
   upload_file:
@@ -15,9 +15,5 @@ jobs:
 
       - name: Upload File to SharePoint
         shell: pwsh
-        env:
-          TENANT_ID: ${{ secrets.SHAREPOINT_TENANT_ID }}
-          CLIENT_ID: ${{ secrets.SHAREPOINT_CLIENT_ID }}
-          CLIENT_SECRET: ${{ secrets.SHAREPOINT_CLIENT_SECRET }}
         run: |
-          pwsh -File ./.github/scripts/execute-data-patch.ps1
+          pwsh -File ./execute-data-patch.ps1
